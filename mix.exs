@@ -32,6 +32,7 @@ defmodule Sveltly.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:cachex, "~> 3.6"},
       {:live_svelte, "~> 0.15.0-rc"},
       {:phoenix, "~> 1.7.14"},
       {:phoenix_ecto, "~> 4.5"},

@@ -7,7 +7,7 @@
   interface Props extends HTMLAttributes<HTMLSpanElement | HTMLAnchorElement> {
     variant?: Variant;
     href?: string;
-    class: string | undefined | null;
+    class?: string | undefined | null;
     children: Snippet<[]>;
   }
 

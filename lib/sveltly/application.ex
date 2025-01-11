@@ -8,6 +8,7 @@ defmodule Sveltly.Application do
   @impl true
   def start(_type, _args) do
     children = [
+      {Cachex, name: :featured_raffles_cache},
       {NodeJS.Supervisor, [path: LiveSvelte.SSR.NodeJS.server_path(), pool_size: 4]},
       SveltlyWeb.Telemetry,
       Sveltly.Repo,

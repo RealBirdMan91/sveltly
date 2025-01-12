@@ -21,6 +21,8 @@ defmodule SveltlyWeb.Router do
 
     live "/raffles", RaffleLive.Index
     live "/raffles/:id", RaffleLive.Show
+
+    live "/admin/raffles", AdminRaffleLive.Index
   end
 
   # Other scopes may use custom stacks.

@@ -4,6 +4,7 @@
   import { Badge } from "$lib/components/ui/badge";
   import { cn } from "$lib/utils";
   import { Button } from "$lib/components/ui/button";
+  import RafflesBadge from "$lib/components/shared/RafflesBadge.svelte";
 
   const { raffle }: { raffle: Raffle } = $props();
 </script>
@@ -24,14 +25,7 @@
       <p class="text-neutral-700 font-medium">
         Price: {raffle.ticket_price}
       </p>
-      <Badge
-        class={cn(
-          raffle.status === "open" && "bg-blue-500",
-          raffle.status === "upcoming" && "bg-neutral-400",
-          raffle.status === "closed" && "bg-red-500",
-          "text-white"
-        )}>{raffle.status}</Badge
-      >
+      <RafflesBadge status={raffle.status} />
     </div>
   </Card.Content>
   <Card.Footer class="space-x-4">

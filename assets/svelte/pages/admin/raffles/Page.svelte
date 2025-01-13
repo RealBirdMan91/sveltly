@@ -1,5 +1,6 @@
 <script lang="ts">
   import RafflesBadge from "$lib/components/shared/RafflesBadge.svelte";
+  import Button from "$lib/components/ui/button/Button.svelte";
   import * as Table from "$lib/components/ui/table";
   import type { Raffle } from "$lib/types/raffle";
 
@@ -20,8 +21,15 @@
   }
 </script>
 
-<div class="container m-auto flex flex-col gap-8">
-  <h1 class="text-4xl text-neutral-800">Table of all Raffles</h1>
+<section class="container m-auto flex flex-col gap-8">
+  <div class="flex justify-between items-center">
+    <h1 class="text-4xl text-neutral-800">Table of all Raffles</h1>
+    <Button
+      href="/admin/raffles/new"
+      data-phx-link="redirect"
+      data-phx-link-state="push">Create Raffle</Button
+    >
+  </div>
 
   <Table.Root>
     <Table.Caption>A List of all your Raffles</Table.Caption>
@@ -55,4 +63,4 @@
       {/each}
     </Table.Body>
   </Table.Root>
-</div>
+</section>

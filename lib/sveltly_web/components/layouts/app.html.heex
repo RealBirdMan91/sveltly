@@ -1,8 +1,6 @@
-<.svelte name="layouts/MainLayout">
-  <:flash>
+<main class="px-4 py-20 sm:px-6 lg:px-8">
+  <div class="mx-auto">
     <.flash_group flash={@flash} />
-  </:flash>
-  <:children>
     {@inner_content}
-  </:children>
-</.svelte>
+  </div>
+</main>

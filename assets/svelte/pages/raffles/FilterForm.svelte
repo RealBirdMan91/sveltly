@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Input from "$lib/components/ui/input/Input.svelte";
+  import { Input } from "$lib/components/ui/input";
   import * as Select from "$lib/components/ui/select";
   import type { Params } from "./Page.svelte";
 
@@ -33,12 +33,13 @@
       })}
   />
   <Select.Root
-    selected={status.find((s) => s.value === values.status)}
-    onSelectedChange={(field) => {
-      field && onFilterChange({ ...values, status: field.value });
+    items={status}
+    selectedValue={values.status}
+    onSelectedChange={(newVal) => {
+      onFilterChange({ ...values, status: newVal });
     }}
   >
-    <Select.Trigger class="w-[180px]" defaultLabel="Select Something" />
+    <Select.Trigger class="w-[180px]" defaultLabel="Select a status" />
     <Select.Content>
       {#each status as { value: v, label: l }}
         <Select.Item value={v}>{l}</Select.Item>
@@ -47,12 +48,13 @@
   </Select.Root>
 
   <Select.Root
-    selected={sort_by.find((s) => s.value === values.sort_by)}
-    onSelectedChange={(field) => {
-      field && onFilterChange({ ...values, sort_by: field.value });
+    items={sort_by}
+    selectedValue={values.sort_by}
+    onSelectedChange={(value) => {
+      onFilterChange({ ...values, sort_by: value });
     }}
   >
-    <Select.Trigger class="w-[180px]" defaultLabel="Select Something" />
+    <Select.Trigger class="w-[180px]" defaultLabel="Sort by" />
     <Select.Content>
       {#each sort_by as { value: v, label: l }}
         <Select.Item value={v}>{l}</Select.Item>

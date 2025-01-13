@@ -12,6 +12,7 @@
   }
 
   type Props = {
+    items: SelectOption[];
     required?: boolean;
     disabled?: boolean;
     preventScroll?: boolean;
@@ -27,8 +28,8 @@
     forceVisible?: boolean;
     typeahead?: boolean;
     children: Snippet;
-    selected?: SelectOption | null;
-    onSelectedChange?: (selected: SelectOption | null) => void;
+    selectedValue?: SelectOption["value"] | null;
+    onSelectedChange?: (selected: SelectOption["value"] | null) => void;
   };
 
   const defaultPosition: FloatingConfig = {
@@ -37,6 +38,7 @@
     sameWidth: true,
   };
   let {
+    items,
     required = false,
     disabled = false,
     preventScroll = true,
@@ -47,15 +49,16 @@
     defaultOpen = false,
     forceVisible = false,
     typeahead = false,
-
     children,
-
-    selected = null,
+    selectedValue = $bindable(null),
     onSelectedChange = () => {},
   }: Props = $props();
 
-  const internalSelectedStore: Writable<SelectOption | null> =
-    writable(selected);
+  const internalSelectedStore: Writable<SelectOption | null> = writable(
+    selectedValue
+      ? items.find((it) => it.value === selectedValue) || null
+      : null
+  );
 
   const select = createSelect<T, false, SelectOption>({
     required,
@@ -80,12 +83,22 @@
   });
 
   $effect(() => {
-    internalSelectedStore.set(selected);
+    if (selectedValue) {
+      const found = items.find((it) => it.value === selectedValue) || null;
+      internalSelectedStore.set(found);
+    } else {
+      internalSelectedStore.set(null);
+    }
   });
 
-  const { selected: internalSelected } = select.states;
+  const { selected } = select.states;
   $effect(() => {
-    onSelectedChange($internalSelected);
+    const current = $selected;
+    if (current) {
+      onSelectedChange(current.value);
+    } else {
+      onSelectedChange(null);
+    }
   });
 
   setSelectContext({ select });

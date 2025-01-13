@@ -2,14 +2,13 @@
   import type { Snippet } from "svelte";
 
   type Props = {
-    flash: Snippet;
     children: Snippet;
   };
 
-  let { flash, children }: Props = $props();
+  let { children }: Props = $props();
 </script>
 
-<div class="app-layout">
+<div class="app-layout flex flex-col min-h-screen gap-12">
   <header class="bg-primary text-white px-8 py-4">
     <nav class="flex justify-between items-center">
       <h3 class="cursor-pointer">
@@ -49,16 +48,12 @@
     </nav>
   </header>
 
-  <section class="flash">
-    {@render flash?.()}
-  </section>
-
   <!-- Hier kommt der eigentliche Inhalt (LiveViews etc.) -->
-  <main>
+  <main class="flex-1">
     {@render children?.()}
   </main>
 
-  <footer class="flex flex-1 bg-primary px-8 py-4 text-white justify-end">
+  <footer class="flex bg-primary px-8 py-4 text-white justify-end">
     <h4>© 2025</h4>
   </footer>
 </div>

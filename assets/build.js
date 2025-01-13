@@ -10,6 +10,8 @@ const importGlobPlugin = require("esbuild-plugin-import-glob").default
 
 const sveltePreprocess = require("svelte-preprocess")
 
+
+
 // CLI-Argumente (z. B. --watch, --deploy) ermitteln
 const args = process.argv.slice(2)
 const watch = args.includes("--watch")
@@ -21,6 +23,32 @@ const deploy = args.includes("--deploy")
 ;(async () => {
   // ESM-Package @melt-ui/pp via await import(...) laden
   const { sequence, preprocessMeltUI } = await import("@melt-ui/pp")
+
+  function preprocessMeltUIIgnoreTS(options = {}){
+    const originalPreprocessor = preprocessMeltUI(options);
+  
+    return {
+      markup(input) {
+        if (input.filename?.endsWith(".svelte.ts")) {
+          // Einfach ignorieren → keine Änderungen
+          return input;
+        }
+        return originalPreprocessor.markup?.(input);
+      },
+      script(input) {
+        if (input.filename?.endsWith(".svelte.ts")) {
+          return input;
+        }
+        return originalPreprocessor.script?.(input);
+      },
+      style(input) {
+        if (input.filename?.endsWith(".svelte.ts")) {
+          return input;
+        }
+        return originalPreprocessor.style?.(input);
+      },
+    };
+  }
 
   // Optional: client/server conditions
   let clientConditions = ["svelte", "browser"]
@@ -47,9 +75,10 @@ const deploy = args.includes("--deploy")
       importGlobPlugin(),
       // sveltePlugin mit Preprocessor-Kette
       sveltePlugin({
+        extensions: [".svelte", ".svelte.ts", ".svelte.js"],
         preprocess: sequence([
           sveltePreprocess(),
-          preprocessMeltUI(),
+          preprocessMeltUIIgnoreTS()
         ]),
         compilerOptions: {
           dev: !deploy,
@@ -76,9 +105,10 @@ const deploy = args.includes("--deploy")
     plugins: [
       importGlobPlugin(),
       sveltePlugin({
+        extensions: [".svelte", ".svelte.ts", ".svelte.js"],
         preprocess: sequence([
           sveltePreprocess(),
-          preprocessMeltUI(),
+          preprocessMeltUIIgnoreTS()
         ]),
         compilerOptions: {
           dev: !deploy,

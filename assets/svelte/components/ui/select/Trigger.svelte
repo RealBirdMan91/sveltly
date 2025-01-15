@@ -1,19 +1,20 @@
 <script lang="ts">
   import { cn } from "$lib/utils";
+  import type { HTMLButtonAttributes } from "svelte/elements";
   import { getSelectContext } from "./ctx";
   import { melt } from "@melt-ui/svelte";
 
-  type Props = {
+  interface Props extends HTMLButtonAttributes {
     class?: string;
     defaultLabel?: string;
-  };
+  }
 
   // Kontext holen, um an "trigger" und "selectedLabel" zu kommen
   const { select } = getSelectContext();
   const { trigger } = select.elements;
   const { selectedLabel } = select.states;
 
-  let { class: className, defaultLabel }: Props = $props();
+  let { class: className, defaultLabel, ...rest }: Props = $props();
 </script>
 
 <button
@@ -22,6 +23,7 @@
     "border-input bg-background ring-offset-background focus-visible:ring-ring aria-[invalid]:border-destructive data-[placeholder]:[&>span]:text-muted-foreground flex h-10 w-full items-center justify-between rounded-md border px-3 py-2 text-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1",
     className
   )}
+  {...rest}
 >
   {$selectedLabel || (defaultLabel && defaultLabel)}
   <svg

@@ -18,5 +18,8 @@ defmodule Sveltly.Raffles.Raffle do
     raffle
     |> cast(attrs, [:status, :description, :prize, :ticket_price, :image_path])
     |> validate_required([:status, :description, :prize, :ticket_price, :image_path])
+    |> validate_length(:prize, min: 1)
+    |> validate_length(:description, min: 25)
+    |> validate_number(:ticket_price, greater_than_or_equal_to: 1, less_than_or_equal_to: 100)
   end
 end

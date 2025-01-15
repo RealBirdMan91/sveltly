@@ -7,6 +7,16 @@
     RafflesSchema,
     type TRaffleSchema,
   } from "$lib/schemas/raffle_schema";
+  import type { Raffle } from "$lib/types/raffle";
+  import type { Live } from "live_svelte";
+
+  type Props = {
+    live: Live;
+    defaultFormValues: Raffle;
+  };
+
+  let { live, defaultFormValues }: Props = $props();
+  let loading = $state(false);
 
   const status = [
     { value: "upcoming", label: "Upcoming" },
@@ -16,17 +26,16 @@
 
   const { formState, handleSubmit, register } = useForm<TRaffleSchema>({
     initialValues: {
-      ticket_price: 0,
-      status: "upcoming",
-      description: "",
-      prize: "",
-      image_path: "",
+      ...defaultFormValues,
     },
     schema: RafflesSchema,
   });
 
   function onSubmitHandler(value: TRaffleSchema) {
-    console.log(value);
+    loading = true;
+    live.pushEvent("create_raffle", { raffle: value }, () => {
+      loading = false;
+    });
   }
 </script>
 
@@ -58,23 +67,27 @@
     <Form.Field>
       <Form.Label for="status">Status</Form.Label>
       <Select.Root items={status} {...register("status")}>
-        <Select.Trigger class="w-[180px]" defaultLabel="Select status" />
+        <Select.Trigger
+          id="status"
+          class="w-[180px]"
+          defaultLabel="Select status"
+        />
         <Select.Content>
           {#each status as { value: v, label: l }}
             <Select.Item value={v}>{l}</Select.Item>
           {/each}
         </Select.Content>
       </Select.Root>
-      <Form.Field>
-        <Form.Label for="image_path">Image Path</Form.Label>
-        <Form.Input
-          {...register("image_path")}
-          type="text"
-          id="image_path"
-          name="image_path"
-        />
-      </Form.Field>
     </Form.Field>
-    <Button type="submit">Create Raffle</Button>
+    <Form.Field>
+      <Form.Label for="image_path">Image Path</Form.Label>
+      <Form.Input
+        {...register("image_path")}
+        type="text"
+        id="image_path"
+        name="image_path"
+      />
+    </Form.Field>
+    <Button type="submit" disabled={loading}>Create Raffle</Button>
   </form>
 </section>

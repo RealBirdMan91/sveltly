@@ -15,7 +15,6 @@
     params: Params;
   };
   let { raffles, live, params }: Props = $props();
-  $inspect(raffles);
 </script>
 
 <section class="container mx-auto p-4 flex flex-col space-y-6">

@@ -1,6 +1,7 @@
-<main class="px-4 py-20 sm:px-6 lg:px-8">
-  <div class="mx-auto">
+<div class="app-layout flex flex-col min-h-screen gap-12">
+  <.svelte name="layouts/Header" />
+  <main class="flex-1">
     <.flash_group flash={@flash} />
     {@inner_content}
-  </div>
-</main>
+  </main>
+</div>
